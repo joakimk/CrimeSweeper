@@ -49,7 +49,7 @@ public class StartActivity extends MapActivity {
 
         controller.stopPanning();
         controller.setZoom(15);
-        controller.zoomIn();
+        //controller.zoomIn();
 
         MyLocationOverlay myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableCompass();
