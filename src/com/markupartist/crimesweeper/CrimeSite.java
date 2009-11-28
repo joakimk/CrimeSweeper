@@ -17,14 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.*;
-
-import android.util.Log;
 import android.location.Location;
-
-import javax.xml.parsers.DocumentBuilder;
 
 public class CrimeSite extends GeoPoint {
 	float collisionDistance = 20.0f;

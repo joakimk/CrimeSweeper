@@ -2,7 +2,6 @@ package com.markupartist.crimesweeper;
 
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.MapView;
-import com.google.android.maps.GeoPoint;
 import android.content.Context;
 import android.location.Location;
 
