@@ -29,8 +29,8 @@ public class StartActivity extends MapActivity {
 
         List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
         crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
-        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
-        
+        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));
+        crimeSites.add(new CrimeSite("Close to me", 59279986, 1808275));
         
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
