@@ -48,10 +48,8 @@ public class StartActivity extends MapActivity {
         itemizedOverlay = new HelloItemizedOverlay(drawable);
 
         GeoPoint sthlmCenterPoint = new GeoPoint(59314207, 18073497); 
-        mapController.setCenter(sthlmCenterPoint);
         OverlayItem sthlmOverlayitem = new OverlayItem(sthlmCenterPoint, "aa", "bb");
         itemizedOverlay.addOverlay(sthlmOverlayitem);
-
         mapOverlays.add(itemizedOverlay);
 
         mapController.setZoom(15);
