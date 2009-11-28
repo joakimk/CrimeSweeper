@@ -72,21 +72,26 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         Drawable drawable = this.getResources().getDrawable(android.R.drawable.btn_star);
         final HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(drawable);
 
-        class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, Void> {
-            protected Void doInBackground(Void... voids) {
+        class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, HelloItemizedOverlay> {
+            @Override
+            protected HelloItemizedOverlay doInBackground(Void... voids) {
                 List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(60*24);
                 for(CrimeSite crimeSite: crimeSites) {
                     OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
                     itemizedOverlay.addOverlay(crimeSiteOverlayitem);
                 }
-                mapOverlays.add(itemizedOverlay);
 
-                return null;
+                return itemizedOverlay;
+            }
+
+            @Override
+            protected void onPostExecute(HelloItemizedOverlay helloItemizedOverlay) {
+                mapOverlays.add(itemizedOverlay);
             }
         }
 
         PopulateCrimeOverlaysTask populateCrimeOverlaysTask = new PopulateCrimeOverlaysTask();
-        populateCrimeOverlaysTask.execute(null);
+        populateCrimeOverlaysTask.execute();
 
         mapController.setZoom(10);
     }
@@ -136,6 +141,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
      */
     private void increasePoints() {
         Log.d("Start", "increasePoints");
+        //String currentPoints = (String) mPointsView.getText();
 
         /*
         String currentPoints = (String) mPointsView.getText();
