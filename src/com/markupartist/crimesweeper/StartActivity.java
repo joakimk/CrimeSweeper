@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
+    public static int CRIME_SITE_TIME_INTERVAL = 60 * 24 * 30;
     private static final int DIALOG_GAME_FINISHED = 1;
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
@@ -70,7 +71,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, HelloItemizedOverlay> {
             @Override
             protected HelloItemizedOverlay doInBackground(Void... voids) {
-                List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(60*24);
+                List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(CRIME_SITE_TIME_INTERVAL);
                 for(CrimeSite crimeSite: crimeSites) {
                     OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
                     itemizedOverlay.addOverlay(crimeSiteOverlayitem);

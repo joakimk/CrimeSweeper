@@ -20,7 +20,7 @@ import java.net.*;
 import android.location.Location;
 
 public class CrimeSite extends GeoPoint {
-	float collisionDistance = 20.0f;
+	float collisionDistance = 50.0f;
 	private static final String TAG = "Collision: ";
     private String mTitle;
     	

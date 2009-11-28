@@ -19,7 +19,7 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
         class PopulateCrimeSites extends AsyncTask<Void, Void, List<CrimeSite>> {
             @Override
             protected List<CrimeSite> doInBackground(Void... voids) {
-                return CrimeSite.getCrimeSites(24 * 60);
+                return CrimeSite.getCrimeSites(StartActivity.CRIME_SITE_TIME_INTERVAL);
             }
 
             @Override
