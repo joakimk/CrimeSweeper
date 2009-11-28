@@ -1,11 +1,7 @@
 package com.markupartist.crimesweeper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.drawable.Drawable;
-import android.*;
-import android.view.View;
-import android.view.MotionEvent;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -19,6 +15,10 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class StartActivity extends MapActivity {
+    private MapView mapView;
+    private MyLocationOverlay myLocationOverlay;
+    private MapController mapController;
+
     /**
      * Called when the activity is first created.
      */
@@ -32,35 +32,57 @@ public class StartActivity extends MapActivity {
         crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
         
         
-        MapView mapView = (MapView) findViewById(R.id.mapview);
+        mapView = (MapView) findViewById(R.id.mapview);
+        mapController = mapView.getController();
 
-        List<Overlay> mapOverlays;
-        Drawable drawable;
+        initMap();
+
+        mapView.setClickable(true);
+        mapView.setEnabled(true);
+        mapView.setStreetView(true);
+
+        List<Overlay> mapOverlays = mapView.getOverlays();
+        Drawable drawable = this.getResources().getDrawable(android.R.drawable.picture_frame);
         HelloItemizedOverlay itemizedOverlay;
 
-        mapOverlays = mapView.getOverlays();
-        drawable = this.getResources().getDrawable(android.R.drawable.picture_frame);
         itemizedOverlay = new HelloItemizedOverlay(drawable);
 
-        mapView.setStreetView(true);
-        MapController controller = mapView.getController();
         GeoPoint sthlmCenterPoint = new GeoPoint(59314207, 18073497); 
-        controller.setCenter(sthlmCenterPoint);
-
+        mapController.setCenter(sthlmCenterPoint);
         OverlayItem sthlmOverlayitem = new OverlayItem(sthlmCenterPoint, "aa", "bb");
-
         itemizedOverlay.addOverlay(sthlmOverlayitem);
-        mapOverlays.add(itemizedOverlay);
-//
-        controller.stopPanning();
-        controller.setZoom(15);
-//        controller.zoomIn();
 
-        MyLocationOverlay myLocationOverlay = new MyLocationOverlay(this, mapView);
+        mapOverlays.add(itemizedOverlay);
+
+        mapController.setZoom(15);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         myLocationOverlay.enableCompass();
         myLocationOverlay.enableMyLocation();
+    }
 
-        mapOverlays.add(myLocationOverlay);
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        myLocationOverlay.disableCompass();
+        myLocationOverlay.disableMyLocation();
+    }
+
+    private void initMap() {
+        myLocationOverlay = new MyLocationOverlay(this, mapView);
+        mapView.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.enableCompass();
+        myLocationOverlay.enableMyLocation();
+        myLocationOverlay.runOnFirstFix(new Runnable() {
+            public void run() {
+                mapController.animateTo(myLocationOverlay.getMyLocation());
+            }
+        });
     }
 
     protected boolean isRouteDisplayed() {
