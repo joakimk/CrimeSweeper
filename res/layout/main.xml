@@ -35,8 +35,7 @@
 			<TextView
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
-                android:textStyle="bold"
-			    android:text="Crime Log"
+			    android:text="@string/hello"
 			    />
 			<ListView
 			    android:id="@+id/crime_log"
