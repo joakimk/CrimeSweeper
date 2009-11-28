@@ -1,20 +1,24 @@
 package com.markupartist.crimesweeper;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.AsyncTask;
-import android.graphics.drawable.Drawable;
-import android.widget.ListView;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Button;
 import android.view.View;
 import android.app.Dialog;
 import android.app.AlertDialog;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.google.android.maps.*;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.LinkedList;
 
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener, CrimeSitesLoadedListener {
     private static int HIT_POINT = 10;
@@ -29,7 +33,10 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     private TextView mCountDownView;
     private GameCountDown mGameCountDown;
     private List<CrimeSite> crimeSites;
-    List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();    
+    //List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();
+    List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();
+    private Button mStartButton;
+    private LinkedList<String> mCrimeLogList;
 
     /**
      * Called when the activity is first created.
@@ -41,8 +48,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
 
         // Setup log view
         ListView crimeLogView = (ListView) findViewById(R.id.crime_log);
-        ArrayList<String> crimeLogList = new ArrayList<String>();
-        mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, crimeLogList);
+        //ArrayList<String> mCrimeLogList = new ArrayList<String>();
+        mCrimeLogList = new LinkedList<String>();
+        mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, mCrimeLogList);
         crimeLogView.setAdapter(mLogAdapter);
 
         // Setup points view
@@ -52,8 +60,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mCountDownView = (TextView) findViewById(R.id.time);
 
         // Setup start button
-        Button startButton = (Button) findViewById(R.id.start_game);
-        startButton.setOnClickListener(this);
+        mStartButton = (Button) findViewById(R.id.start_game);
+        mStartButton.setOnClickListener(this);
+        mStartButton.setEnabled(false); // Start disables until all crime sites has been loaded.
         
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
@@ -92,6 +101,10 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         new PopulateCrimeOverlaysTask().execute();
 
         mapController.setZoom(15);
+
+
+        onCrimeLocationHit(new CrimeSite("sdsds", 2222, 222));
+        onCrimeLocationHit(new CrimeSite("sdsds 111", 2222, 222));
     }
 
     @Override
@@ -133,8 +146,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     public void onCrimeLocationHit(CrimeSite crimeSite) {
         if(mFoundCrimeSites.contains(crimeSite))
           return;
-          
-        mLogAdapter.add(crimeSite.getTitle());
+
+        //mLogAdapter.add(crimeSite.getTitle());
+        mCrimeLogList.addFirst(crimeSite.getTitle());
         mLogAdapter.notifyDataSetChanged();
         mFoundCrimeSites.add(crimeSite);
         increasePoints();
@@ -179,7 +193,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     }
 
     public void onCrimeSitesLoaded() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        mStartButton.setEnabled(true);
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
