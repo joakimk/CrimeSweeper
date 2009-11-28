@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.view.View;
 import android.app.Dialog;
 import android.app.AlertDialog;
-import android.util.Log;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -28,6 +27,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     private TextView mPointsView;
     private TextView mCountDownView;
     private GameCountDown mGameCountDown;
+    private List<CrimeSite> crimeSites;
 
     /**
      * Called when the activity is first created.
@@ -56,8 +56,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
 
-        initMap();
-
         mapView.setClickable(true);
         mapView.setEnabled(true);
         mapView.setStreetView(true);
@@ -70,7 +68,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, HelloItemizedOverlay> {
             @Override
             protected HelloItemizedOverlay doInBackground(Void... voids) {
-                List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(60*24);
+                crimeSites = CrimeSite.getCrimeSites(60*24);
                 for(CrimeSite crimeSite: crimeSites) {
                     OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
                     itemizedOverlay.addOverlay(crimeSiteOverlayitem);
@@ -82,6 +80,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
             @Override
             protected void onPostExecute(HelloItemizedOverlay helloItemizedOverlay) {
                 mapOverlays.add(itemizedOverlay);
+
+                initMap();
             }
         }
 
@@ -107,7 +107,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     }
 
     private void initMap() {
-        playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
+        playerLocationOverlay = new PlayerLocationOverlay(this, mapView, crimeSites);
         mapView.getOverlays().add(playerLocationOverlay);
         playerLocationOverlay.enableCompass();
         playerLocationOverlay.enableMyLocation();

@@ -2,34 +2,18 @@ package com.markupartist.crimesweeper;
 
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
 import android.content.Context;
 import android.location.Location;
-import android.os.AsyncTask;
 
 import java.util.List;
 
 public class PlayerLocationOverlay extends MyLocationOverlay {
     private CrimeLocationHitListener listener;
-    private List<CrimeSite> mCrimeSites = null;
+    private List<CrimeSite> mCrimeSites;
 
-    public PlayerLocationOverlay(Context context, MapView mapView) {
+    public PlayerLocationOverlay(Context context, MapView mapView, List<CrimeSite> crimeSites) {
         super(context, mapView);
-
-        class PopulateCrimeSites extends AsyncTask<Void, Void, List<CrimeSite>> {
-            @Override
-            protected List<CrimeSite> doInBackground(Void... voids) {
-                return CrimeSite.getCrimeSites(24 * 60);
-            }
-
-            @Override
-            protected void onPostExecute(List<CrimeSite> crimeSites) {
-                mCrimeSites = crimeSites;
-            }
-        }
-
-        PopulateCrimeSites populateCrimeSites = new PopulateCrimeSites();
-        populateCrimeSites.execute();
+        mCrimeSites = crimeSites;
     }
 
     public void setCrimeLocationHitListener(CrimeLocationHitListener listener) {
@@ -40,7 +24,7 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(listener == null || mCrimeSites == null) {
+        if(listener == null) {
             return;
         }
 
