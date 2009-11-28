@@ -85,8 +85,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
             }
         }
 
-        PopulateCrimeOverlaysTask populateCrimeOverlaysTask = new PopulateCrimeOverlaysTask();
-        populateCrimeOverlaysTask.execute();
+        new PopulateCrimeOverlaysTask().execute();
 
         mapController.setZoom(15);
     }
