@@ -2,6 +2,7 @@ package com.markupartist.crimesweeper;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.AsyncTask;
 import android.graphics.drawable.Drawable;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
@@ -17,13 +18,6 @@ import com.google.android.maps.*;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
- * Created by IntelliJ IDEA.
- * User: johan
- * Date: Nov 22, 2009
- * Time: 1:34:04 PM
- * To change this template use File | Settings | File Templates.
- */
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
@@ -74,18 +68,27 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mapView.setEnabled(true);
         mapView.setStreetView(true);
 
-        List<Overlay> mapOverlays = mapView.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(android.R.drawable.picture_frame);
-        HelloItemizedOverlay itemizedOverlay;
+        final List<Overlay> mapOverlays = mapView.getOverlays();
+        Drawable drawable = this.getResources().getDrawable(android.R.drawable.btn_star);
+        final HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(drawable);
 
-        itemizedOverlay = new HelloItemizedOverlay(drawable);
+        class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, Void> {
+            protected Void doInBackground(Void... voids) {
+                List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(60*24);
+                for(CrimeSite crimeSite: crimeSites) {
+                    OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
+                    itemizedOverlay.addOverlay(crimeSiteOverlayitem);
+                }
+                mapOverlays.add(itemizedOverlay);
 
-        GeoPoint sthlmCenterPoint = new GeoPoint(59314207, 18073497); 
-        OverlayItem sthlmOverlayitem = new OverlayItem(sthlmCenterPoint, "aa", "bb");
-        itemizedOverlay.addOverlay(sthlmOverlayitem);
-        mapOverlays.add(itemizedOverlay);
+                return null;
+            }
+        }
 
-        mapController.setZoom(15);
+        PopulateCrimeOverlaysTask populateCrimeOverlaysTask = new PopulateCrimeOverlaysTask();
+        populateCrimeOverlaysTask.execute(null);
+
+        mapController.setZoom(10);
     }
 
     @Override
