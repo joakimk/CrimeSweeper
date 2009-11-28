@@ -17,7 +17,7 @@ import com.google.android.maps.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
+public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener, CrimeSitesLoadedListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
     public static int CRIME_SITE_TIME_INTERVAL = 60 * 24 * 30;
@@ -154,6 +154,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                 mPointsView.setText("0");
                 // Register the callback for crime hits
                 playerLocationOverlay.setCrimeLocationHitListener(this);
+                // Reset the crime log
+                mLogAdapter.clear();
         }
     }
 
@@ -168,6 +170,10 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                     .create();
         }
         return null;
+    }
+
+    public void onCrimeSitesLoaded() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
