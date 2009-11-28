@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.app.AlertDialog;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.util.Log;
 import com.google.android.maps.*;
 
 import java.util.ArrayList;
@@ -102,9 +103,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
 
         mapController.setZoom(15);
 
-
-        onCrimeLocationHit(new CrimeSite("sdsds", 2222, 222));
-        onCrimeLocationHit(new CrimeSite("sdsds 111", 2222, 222));
+        //onCrimeLocationHit(new CrimeSite("sdsds", 2222, 222));
+        //onCrimeLocationHit(new CrimeSite("sdsds 111", 2222, 222));
     }
 
     @Override
@@ -193,6 +193,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     }
 
     public void onCrimeSitesLoaded() {
+        Log.d("Start", "onCrimeSitesLoaded");
         mStartButton.setEnabled(true);
     }
 
