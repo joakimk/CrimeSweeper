@@ -29,7 +29,7 @@
     		android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-		    android:text="Time: 3600"
+		    android:text="Time: 59:59"
 		    />
     </LinearLayout>
 	<include layout="@layout/map" />
