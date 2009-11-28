@@ -24,7 +24,7 @@ import java.util.LinkedList;
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener, CrimeSitesLoadedListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
-    public static int CRIME_SITE_TIME_INTERVAL = 60 * 24 * 30;
+    public static int CRIME_SITE_TIME_INTERVAL = 60 * 24 * 15;
     private static final int DIALOG_GAME_FINISHED = 1;
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
@@ -102,9 +102,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         new PopulateCrimeOverlaysTask().execute();
 
         mapController.setZoom(15);
-
-        //onCrimeLocationHit(new CrimeSite("sdsds", 2222, 222));
-        //onCrimeLocationHit(new CrimeSite("sdsds 111", 2222, 222));
     }
 
     @Override
@@ -144,6 +141,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     }
     
     public void onCrimeLocationHit(CrimeSite crimeSite) {
+        Log.d("Start", "onCrimeLocationHit");
         if(mFoundCrimeSites.contains(crimeSite))
           return;
 
