@@ -5,3 +5,6 @@ out
 *.ipr
 *.iws
 */main.xml
+.classpath
+.project
+default.properties

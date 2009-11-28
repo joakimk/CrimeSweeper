@@ -27,6 +27,11 @@ public class StartActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
+        crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
+        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
+        
+        
         MapView mapView = (MapView) findViewById(R.id.mapview);
 
         List<Overlay> mapOverlays;
@@ -46,10 +51,10 @@ public class StartActivity extends MapActivity {
 
         itemizedOverlay.addOverlay(sthlmOverlayitem);
         mapOverlays.add(itemizedOverlay);
-
+//
         controller.stopPanning();
         controller.setZoom(15);
-        //controller.zoomIn();
+//        controller.zoomIn();
 
         MyLocationOverlay myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableCompass();
