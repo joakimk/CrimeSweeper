@@ -14,7 +14,7 @@
     		android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dip"
-		    android:text="100"
+		    android:text="0"
 		    />
         <Button
             android:id="@+id/start_game"
