@@ -16,9 +16,10 @@ import com.google.android.maps.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
+public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener, CrimeSitesLoadedListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
+    public static int CRIME_SITE_TIME_INTERVAL = 60 * 24 * 30;
     private static final int DIALOG_GAME_FINISHED = 1;
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
@@ -28,6 +29,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     private TextView mCountDownView;
     private GameCountDown mGameCountDown;
     private List<CrimeSite> crimeSites;
+    List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();    
 
     /**
      * Called when the activity is first created.
@@ -68,7 +70,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, HelloItemizedOverlay> {
             @Override
             protected HelloItemizedOverlay doInBackground(Void... voids) {
-                crimeSites = CrimeSite.getCrimeSites(60*24);
+                crimeSites = CrimeSite.getCrimeSites(CRIME_SITE_TIME_INTERVAL);
                 for(CrimeSite crimeSite: crimeSites) {
                     OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
                     itemizedOverlay.addOverlay(crimeSiteOverlayitem);
@@ -82,6 +84,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                 mapOverlays.add(itemizedOverlay);
 
                 initMap();
+                
+                onCrimeSitesLoaded();
             }
         }
 
@@ -94,16 +98,20 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     protected void onResume() {
         super.onResume();
 
-        playerLocationOverlay.enableCompass();
-        playerLocationOverlay.enableMyLocation();
+        if(playerLocationOverlay != null) {
+            playerLocationOverlay.enableCompass();
+            playerLocationOverlay.enableMyLocation();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        playerLocationOverlay.disableCompass();
-        playerLocationOverlay.disableMyLocation();
+        if(playerLocationOverlay != null) {
+            playerLocationOverlay.disableCompass();
+            playerLocationOverlay.disableMyLocation();
+        }
     }
 
     private void initMap() {
@@ -121,11 +129,14 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     protected boolean isRouteDisplayed() {
         return false;
     }
-
+    
     public void onCrimeLocationHit(CrimeSite crimeSite) {
+        if(mFoundCrimeSites.contains(crimeSite))
+          return;
+          
         mLogAdapter.add(crimeSite.getTitle());
         mLogAdapter.notifyDataSetChanged();
-
+        mFoundCrimeSites.add(crimeSite);
         increasePoints();
     }
 
@@ -149,6 +160,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                 mPointsView.setText("0");
                 // Register the callback for crime hits
                 playerLocationOverlay.setCrimeLocationHitListener(this);
+                // Reset the crime log
+                mLogAdapter.clear();
         }
     }
 
@@ -163,6 +176,10 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                     .create();
         }
         return null;
+    }
+
+    public void onCrimeSitesLoaded() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
