@@ -21,7 +21,7 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
 
     public PlayerLocationOverlay(Context context, MapView mapView) {
         super(context, mapView);
-        _crimeSites = CrimeSite.getCrimeSites(1440);
+        _crimeSites = CrimeSite.getCrimeSites(24 * 60);
     }
 
     public void setCrimeLocationHitListener(CrimeLocationHitListener listener) {
