@@ -8,4 +8,5 @@ package com.markupartist.crimesweeper;
  * To change this template use File | Settings | File Templates.
  */
 public interface CrimeLocationHitListener {
+    public void onCrimeLocationHit(CrimeSite crimeSite);
 }

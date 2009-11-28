@@ -1,11 +1,9 @@
 package com.markupartist.crimesweeper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.drawable.Drawable;
-import android.*;
-import android.view.View;
-import android.view.MotionEvent;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -18,7 +16,9 @@ import java.util.ArrayList;
  * Time: 1:34:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StartActivity extends MapActivity {
+public class StartActivity extends MapActivity implements CrimeLocationHitListener {
+    private ArrayAdapter<String> mLogAdapter;
+
     /**
      * Called when the activity is first created.
      */
@@ -27,10 +27,15 @@ public class StartActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Setup log view
+        ListView crimeLogView = (ListView) findViewById(R.id.crime_log);
+        ArrayList<String> crimeLogList = new ArrayList<String>();
+        mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, crimeLogList);
+        crimeLogView.setAdapter(mLogAdapter);
+
         List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
         crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
-        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
-        
+        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));
         
         MapView mapView = (MapView) findViewById(R.id.mapview);
 
@@ -65,6 +70,11 @@ public class StartActivity extends MapActivity {
 
     protected boolean isRouteDisplayed() {
         return false;
+    }
+
+    public void onCrimeLocationHit(CrimeSite crimeSite) {
+        mLogAdapter.add(crimeSite.getTitle());
+        mLogAdapter.notifyDataSetChanged();
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
