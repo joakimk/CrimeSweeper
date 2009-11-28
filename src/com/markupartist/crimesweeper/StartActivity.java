@@ -125,12 +125,13 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     }
     
     public void onCrimeLocationHit(CrimeSite crimeSite) {
-        if(!mFoundCrimeSites.contains(crimeSite)) {
-          mLogAdapter.add(crimeSite.getTitle());
-          mLogAdapter.notifyDataSetChanged();
-          mFoundCrimeSites.add(crimeSite);
-          increasePoints();
-        }
+        if(mFoundCrimeSites.contains(crimeSite))
+          return;
+          
+        mLogAdapter.add(crimeSite.getTitle());
+        mLogAdapter.notifyDataSetChanged();
+        mFoundCrimeSites.add(crimeSite);
+        increasePoints();
     }
 
     /**
