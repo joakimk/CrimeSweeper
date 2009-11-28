@@ -1,12 +1,16 @@
 package com.markupartist.crimesweeper;
 import com.google.android.maps.GeoPoint;
 import java.lang.Math;
+import java.util.List;
+import java.util.ArrayList;
+
 import android.util.Log;
+import android.location.Location;
 
 import javax.xml.parsers.DocumentBuilder;
 
 public class CrimeSite extends GeoPoint {
-	double collisionDistance = 2.3848992733381165;
+	float collisionDistance = 20.0f;
 	private static final String TAG = "Collision: ";
     private String _title;
 	
@@ -15,15 +19,23 @@ public class CrimeSite extends GeoPoint {
 		return _title;
 	}
 
-	boolean intersectWithPlayer(GeoPoint player)
+	boolean intersectWithPlayer(Location player)
 	{
-		Log.v(TAG, "distance=" + Double.toString(distanceBetweenCoords(this.getLatitudeE6(), this.getLongitudeE6(), player.getLatitudeE6(), player.getLongitudeE6())));
-		return distanceBetweenCoords(this.getLatitudeE6(), this.getLongitudeE6(), player.getLatitudeE6(), player.getLongitudeE6()) <= collisionDistance;
+        Location crimeSiteLocation = new Location(player);
+        crimeSiteLocation.setLatitude(this.getLatitudeE6() / 1E6);
+        crimeSiteLocation.setLongitude(this.getLongitudeE6() / 1E6);
+
+        float distance = player.distanceTo(crimeSiteLocation);
+        return(distance <= this.collisionDistance);
 	}
 
-    static void GetCrimeSites(int minutes) {
-          //new DocumentBuilder()
-          //  
+    static List<CrimeSite> getCrimeSites(int minutes) {
+        List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
+        crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
+        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));
+        crimeSites.add(new CrimeSite("Close to me", 59279986, 1808275));
+
+        return crimeSites;
     }
 	
 	CrimeSite(String title, int lat, int lng) {

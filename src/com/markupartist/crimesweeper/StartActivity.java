@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class StartActivity extends MapActivity implements CrimeLocationHitListener {
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
-    private MyLocationOverlay myLocationOverlay;
+    private PlayerLocationOverlay playerLocationOverlay;
     private MapController mapController;
 
     /**
@@ -68,26 +68,26 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     protected void onResume() {
         super.onResume();
 
-        myLocationOverlay.enableCompass();
-        myLocationOverlay.enableMyLocation();
+        playerLocationOverlay.enableCompass();
+        playerLocationOverlay.enableMyLocation();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        myLocationOverlay.disableCompass();
-        myLocationOverlay.disableMyLocation();
+        playerLocationOverlay.disableCompass();
+        playerLocationOverlay.disableMyLocation();
     }
 
     private void initMap() {
-        myLocationOverlay = new MyLocationOverlay(this, mapView);
-        mapView.getOverlays().add(myLocationOverlay);
-        myLocationOverlay.enableCompass();
-        myLocationOverlay.enableMyLocation();
-        myLocationOverlay.runOnFirstFix(new Runnable() {
+        playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
+        mapView.getOverlays().add(playerLocationOverlay);
+        playerLocationOverlay.enableCompass();
+        playerLocationOverlay.enableMyLocation();
+        playerLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
-                mapController.animateTo(myLocationOverlay.getMyLocation());
+                mapController.animateTo(playerLocationOverlay.getMyLocation());
             }
         });
     }
