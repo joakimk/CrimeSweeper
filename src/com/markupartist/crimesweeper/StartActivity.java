@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Button;
 import android.view.View;
+import android.app.Dialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;
+    private static final int DIALOG_GAME_FINISHED = 1;
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
     private PlayerLocationOverlay playerLocationOverlay;
@@ -142,6 +146,19 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         }
     }
 
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch(id) {
+        case DIALOG_GAME_FINISHED:
+            return new AlertDialog.Builder(this)
+                    .setTitle("The End")
+                    .setPositiveButton("Ok", null)
+                    .setMessage(String.format("You got %s points", mPointsView.getText()))
+                    .create();
+        }
+        return null;
+    }
+
     private class HelloItemizedOverlay extends ItemizedOverlay {
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
@@ -175,7 +192,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         }
 
         public void onFinish() {
-            //To change body of implemented methods use File | Settings | File Templates.
+            showDialog(DIALOG_GAME_FINISHED);
         }
     }
 }
