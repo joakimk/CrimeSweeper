@@ -1,5 +1,7 @@
 package com.markupartist.crimesweeper;
 
+import javax.xml.parsers.DocumentBuilder;
+
 public class CrimeSite {
 
 	String getTitle()
@@ -15,6 +17,10 @@ public class CrimeSite {
 	int getLng()
 	{
 		return _lng;
+	}
+	
+	static void GetCrimeSites(int minutes) {
+		//new DocumentBuilder()
 	}
 	
 	CrimeSite(String title, int lat, int lng) {
