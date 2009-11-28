@@ -30,6 +30,8 @@ public class CrimeSite extends GeoPoint {
 	float collisionDistance = 20.0f;
 	private static final String TAG = "Collision: ";
     private String _title;
+	int _lat;
+	int _lng;    
 	
 	String getTitle()
 	{
@@ -46,7 +48,7 @@ public class CrimeSite extends GeoPoint {
         return(distance <= this.collisionDistance);
 	}
 	
-	static List<CrimeSite> GetCrimeSites(int minutes)
+	static List<CrimeSite> getCrimeSites(int minutes)
 	{
 		List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
 		
@@ -112,10 +114,5 @@ private
 		return Math.acos( 
 			Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2)
 		);
-	}
-	
-	String _title;
-	int _lat;
-	int _lng;
-		
+	}		
 }

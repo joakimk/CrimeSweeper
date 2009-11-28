@@ -35,8 +35,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         ArrayList<String> crimeLogList = new ArrayList<String>();
         mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, crimeLogList);
         crimeLogView.setAdapter(mLogAdapter);
-
-        List<CrimeSite> crimeSites = CrimeSite.GetCrimeSites(1400);
         
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
