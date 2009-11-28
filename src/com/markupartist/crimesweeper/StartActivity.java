@@ -52,11 +52,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         // Setup start button
         Button startButton = (Button) findViewById(R.id.start_game);
         startButton.setOnClickListener(this);
-
-        List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
-        crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
-        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));
-        crimeSites.add(new CrimeSite("Close to me", 59279986, 1808275));
         
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
@@ -66,28 +61,34 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mapView.setClickable(true);
         mapView.setEnabled(true);
         mapView.setStreetView(true);
+        mapView.setBuiltInZoomControls(true);
 
         final List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(android.R.drawable.btn_star);
         final HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(drawable);
 
-        class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, Void> {
-            protected Void doInBackground(Void... voids) {
+        class PopulateCrimeOverlaysTask extends AsyncTask<Void, Void, HelloItemizedOverlay> {
+            @Override
+            protected HelloItemizedOverlay doInBackground(Void... voids) {
                 List<CrimeSite> crimeSites = CrimeSite.getCrimeSites(60*24);
                 for(CrimeSite crimeSite: crimeSites) {
                     OverlayItem crimeSiteOverlayitem = new OverlayItem(crimeSite, crimeSite.getTitle(), "");
                     itemizedOverlay.addOverlay(crimeSiteOverlayitem);
                 }
-                mapOverlays.add(itemizedOverlay);
 
-                return null;
+                return itemizedOverlay;
+            }
+
+            @Override
+            protected void onPostExecute(HelloItemizedOverlay helloItemizedOverlay) {
+                mapOverlays.add(itemizedOverlay);
             }
         }
 
         PopulateCrimeOverlaysTask populateCrimeOverlaysTask = new PopulateCrimeOverlaysTask();
-        populateCrimeOverlaysTask.execute(null);
+        populateCrimeOverlaysTask.execute();
 
-        mapController.setZoom(10);
+        mapController.setZoom(15);
     }
 
     @Override
@@ -135,6 +136,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
      */
     private void increasePoints() {
         Log.d("Start", "increasePoints");
+        //String currentPoints = (String) mPointsView.getText();
 
         /*
         String currentPoints = (String) mPointsView.getText();
