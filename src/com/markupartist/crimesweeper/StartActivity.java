@@ -1,11 +1,9 @@
 package com.markupartist.crimesweeper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.drawable.Drawable;
-import android.*;
-import android.view.View;
-import android.view.MotionEvent;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -18,7 +16,12 @@ import java.util.ArrayList;
  * Time: 1:34:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StartActivity extends MapActivity {
+public class StartActivity extends MapActivity implements CrimeLocationHitListener {
+    private ArrayAdapter<String> mLogAdapter;
+    private MapView mapView;
+    private PlayerLocationOverlay playerLocationOverlay;
+    private MapController mapController;
+
     /**
      * Called when the activity is first created.
      */
@@ -27,46 +30,72 @@ public class StartActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
-        crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
-        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
-        
-        CrimeSite.GetCrimeSites(1400);
-        
-        
-        MapView mapView = (MapView) findViewById(R.id.mapview);
+        // Setup log view
+        ListView crimeLogView = (ListView) findViewById(R.id.crime_log);
+        ArrayList<String> crimeLogList = new ArrayList<String>();
+        mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, crimeLogList);
+        crimeLogView.setAdapter(mLogAdapter);
 
-        List<Overlay> mapOverlays;
-        Drawable drawable;
+        List<CrimeSite> crimeSites = CrimeSite.GetCrimeSites(1400);
+        
+        mapView = (MapView) findViewById(R.id.mapview);
+        mapController = mapView.getController();
+
+        initMap();
+
+        mapView.setClickable(true);
+        mapView.setEnabled(true);
+        mapView.setStreetView(true);
+
+        List<Overlay> mapOverlays = mapView.getOverlays();
+        Drawable drawable = this.getResources().getDrawable(android.R.drawable.picture_frame);
         HelloItemizedOverlay itemizedOverlay;
 
-        mapOverlays = mapView.getOverlays();
-        drawable = this.getResources().getDrawable(android.R.drawable.picture_frame);
         itemizedOverlay = new HelloItemizedOverlay(drawable);
 
-        mapView.setStreetView(true);
-        MapController controller = mapView.getController();
         GeoPoint sthlmCenterPoint = new GeoPoint(59314207, 18073497); 
-        controller.setCenter(sthlmCenterPoint);
-
         OverlayItem sthlmOverlayitem = new OverlayItem(sthlmCenterPoint, "aa", "bb");
-
         itemizedOverlay.addOverlay(sthlmOverlayitem);
         mapOverlays.add(itemizedOverlay);
-//
-        controller.stopPanning();
-        controller.setZoom(15);
-//        controller.zoomIn();
 
-        MyLocationOverlay myLocationOverlay = new MyLocationOverlay(this, mapView);
-        myLocationOverlay.enableCompass();
-        myLocationOverlay.enableMyLocation();
+        mapController.setZoom(15);
+    }
 
-        mapOverlays.add(myLocationOverlay);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        playerLocationOverlay.enableCompass();
+        playerLocationOverlay.enableMyLocation();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        playerLocationOverlay.disableCompass();
+        playerLocationOverlay.disableMyLocation();
+    }
+
+    private void initMap() {
+        playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
+        mapView.getOverlays().add(playerLocationOverlay);
+        playerLocationOverlay.enableCompass();
+        playerLocationOverlay.enableMyLocation();
+        playerLocationOverlay.runOnFirstFix(new Runnable() {
+            public void run() {
+                mapController.animateTo(playerLocationOverlay.getMyLocation());
+            }
+        });
     }
 
     protected boolean isRouteDisplayed() {
         return false;
+    }
+
+    public void onCrimeLocationHit(CrimeSite crimeSite) {
+        mLogAdapter.add(crimeSite.getTitle());
+        mLogAdapter.notifyDataSetChanged();
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
