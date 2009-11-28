@@ -29,8 +29,8 @@ public class StartActivity extends MapActivity {
 
         List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
         crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
-        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
-        
+        crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));
+        crimeSites.add(new CrimeSite("Close to me", 59279986, 1808275));
         
         MapView mapView = (MapView) findViewById(R.id.mapview);
 
@@ -44,7 +44,8 @@ public class StartActivity extends MapActivity {
 
         mapView.setStreetView(true);
         MapController controller = mapView.getController();
-        GeoPoint sthlmCenterPoint = new GeoPoint(59314207, 18073497); 
+        GeoPoint sthlmCenterPoint = new GeoPoint(59280101,18082343);
+        
         controller.setCenter(sthlmCenterPoint);
 
         OverlayItem sthlmOverlayitem = new OverlayItem(sthlmCenterPoint, "aa", "bb");
