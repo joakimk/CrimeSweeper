@@ -79,6 +79,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
 
     private void initMap() {
         playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
+        playerLocationOverlay.setCrimeLocationHitListener(this);
         mapView.getOverlays().add(playerLocationOverlay);
         playerLocationOverlay.enableCompass();
         playerLocationOverlay.enableMyLocation();
