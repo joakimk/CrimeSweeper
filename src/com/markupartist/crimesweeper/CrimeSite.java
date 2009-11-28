@@ -41,8 +41,8 @@ public class CrimeSite extends GeoPoint {
 	boolean intersectWithPlayer(Location player)
 	{
         Location crimeSiteLocation = new Location(player);
-        crimeSiteLocation.setLatitude(this.getLatitudeE6() / 1E6);
-        crimeSiteLocation.setLongitude(this.getLongitudeE6() / 1E6);
+        crimeSiteLocation.setLatitude(this.getLatitudeE6() / 1000000.0);
+        crimeSiteLocation.setLongitude(this.getLongitudeE6() / 1000000.0);
 
         float distance = player.distanceTo(crimeSiteLocation);
         return(distance <= this.collisionDistance);
