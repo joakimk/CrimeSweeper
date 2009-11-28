@@ -17,13 +17,6 @@ import com.google.android.maps.*;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
- * Created by IntelliJ IDEA.
- * User: johan
- * Date: Nov 22, 2009
- * Time: 1:34:04 PM
- * To change this template use File | Settings | File Templates.
- */
 public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
     private static int HIT_POINT = 10;
     private static long GAME_TIME = 3600000;

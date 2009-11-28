@@ -8,13 +8,6 @@ import android.location.Location;
 
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: joakimb
- * Date: Nov 28, 2009
- * Time: 3:21:52 PM
- * To change this template use File | Settings | File Templates.
- */
 public class PlayerLocationOverlay extends MyLocationOverlay {
     private CrimeLocationHitListener listener;
     private List<CrimeSite> _crimeSites = null;
