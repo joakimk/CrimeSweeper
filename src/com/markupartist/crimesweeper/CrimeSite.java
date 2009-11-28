@@ -22,11 +22,11 @@ import android.location.Location;
 public class CrimeSite extends GeoPoint {
 	float collisionDistance = 20.0f;
 	private static final String TAG = "Collision: ";
-    private String _title;
+    private String mTitle;
     	
 	String getTitle()
 	{
-		return _title;
+		return mTitle;
 	}
 
 	boolean intersectWithPlayer(Location player)
@@ -63,7 +63,7 @@ public class CrimeSite extends GeoPoint {
 
 	CrimeSite(String title, int lat, int lng) {
         super(lat, lng);
-		_title = title;
+		mTitle = title;
 	}
 	
 private
