@@ -195,6 +195,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     public void onCrimeSitesLoaded() {
         Log.d("Start", "onCrimeSitesLoaded");
         mStartButton.setEnabled(true);
+        mStartButton.setText("Start");
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
