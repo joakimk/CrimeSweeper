@@ -24,6 +24,10 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
+        if(listener == null) {
+            return;
+        }
+
         for(CrimeSite crimeSite : _crimeSites) {
             if(crimeSite.intersectWithPlayer(location)) {
                 listener.onCrimeLocationHit(crimeSite);
