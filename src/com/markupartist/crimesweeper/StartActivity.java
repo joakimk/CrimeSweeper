@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.view.View;
 import android.app.Dialog;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import com.google.android.maps.*;
 
 import java.util.List;
