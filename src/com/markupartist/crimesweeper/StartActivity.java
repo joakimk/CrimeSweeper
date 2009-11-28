@@ -1,9 +1,13 @@
 package com.markupartist.crimesweeper;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.graphics.drawable.Drawable;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Button;
+import android.view.View;
 import com.google.android.maps.*;
 
 import java.util.List;
@@ -16,11 +20,16 @@ import java.util.ArrayList;
  * Time: 1:34:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StartActivity extends MapActivity implements CrimeLocationHitListener {
+public class StartActivity extends MapActivity implements CrimeLocationHitListener, View.OnClickListener {
+    private static int HIT_POINT = 10;
+    private static long GAME_TIME = 3600000;
     private ArrayAdapter<String> mLogAdapter;
     private MapView mapView;
     private PlayerLocationOverlay playerLocationOverlay;
     private MapController mapController;
+    private TextView mPointsView;
+    private TextView mCountDownView;
+    private GameCountDown mGameCountDown;
 
     /**
      * Called when the activity is first created.
@@ -35,6 +44,16 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         ArrayList<String> crimeLogList = new ArrayList<String>();
         mLogAdapter = new ArrayAdapter<String>(this, R.layout.crime_log_row, crimeLogList);
         crimeLogView.setAdapter(mLogAdapter);
+
+        // Setup points view
+        mPointsView = (TextView) findViewById(R.id.points);
+
+        // Setup countdown time
+        mCountDownView = (TextView) findViewById(R.id.time);
+
+        // Setup start button
+        Button startButton = (Button) findViewById(R.id.start_game);
+        startButton.setOnClickListener(this);
 
         List<CrimeSite> crimeSites = new ArrayList<CrimeSite>();
         crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
@@ -100,6 +119,27 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     public void onCrimeLocationHit(CrimeSite crimeSite) {
         mLogAdapter.add(crimeSite.getTitle());
         mLogAdapter.notifyDataSetChanged();
+
+        increasePoints();
+    }
+
+    /**
+     * Increases the player points.
+     */
+    private void increasePoints() {
+        int currentPoints = Integer.parseInt(mPointsView.getText().toString());
+        mPointsView.setText(currentPoints + HIT_POINT);
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.start_game:
+                if (mGameCountDown == null) {
+                    mGameCountDown = new GameCountDown(GAME_TIME, 1000);
+                }
+                mGameCountDown.cancel();
+                mGameCountDown.start();
+        }
     }
 
     private class HelloItemizedOverlay extends ItemizedOverlay {
@@ -122,6 +162,20 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         @Override
         public int size() {
             return mOverlays.size();
+        }
+    }
+
+    public class GameCountDown extends CountDownTimer {
+        public GameCountDown(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        public void onTick(long millisUntilFinished) {
+            mCountDownView.setText("Time: " + millisUntilFinished / 1000);
+        }
+
+        public void onFinish() {
+            //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 }
