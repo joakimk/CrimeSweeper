@@ -61,6 +61,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mapView.setClickable(true);
         mapView.setEnabled(true);
         mapView.setStreetView(true);
+        mapView.setBuiltInZoomControls(true);
 
         final List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(android.R.drawable.btn_star);
@@ -87,7 +88,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         PopulateCrimeOverlaysTask populateCrimeOverlaysTask = new PopulateCrimeOverlaysTask();
         populateCrimeOverlaysTask.execute();
 
-        mapController.setZoom(10);
+        mapController.setZoom(15);
     }
 
     @Override
