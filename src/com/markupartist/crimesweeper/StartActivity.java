@@ -134,18 +134,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
      * Increases the player points.
      */
     private void increasePoints() {
-        Log.d("Start", "increasePoints");
-        //String currentPoints = (String) mPointsView.getText();
-
-        /*
         String currentPoints = (String) mPointsView.getText();
-        if (currentPoints == null) {
-            currentPoints = "0";
-        }
-        int points = Integer.parseInt(currentPoints) + HIT_POINT;
-
-        mPointsView.setText(points);
-        */
+        int newPoints = Integer.parseInt(currentPoints) + HIT_POINT;
+        mPointsView.setText(String.valueOf(newPoints));
     }
 
     public void onClick(View view) {
