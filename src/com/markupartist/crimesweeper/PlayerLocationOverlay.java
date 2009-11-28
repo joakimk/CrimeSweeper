@@ -9,11 +9,11 @@ import java.util.List;
 
 public class PlayerLocationOverlay extends MyLocationOverlay {
     private CrimeLocationHitListener listener;
-    private List<CrimeSite> _crimeSites = null;
+    private List<CrimeSite> mCrimeSites = null;
 
     public PlayerLocationOverlay(Context context, MapView mapView) {
         super(context, mapView);
-        _crimeSites = CrimeSite.getCrimeSites(24 * 60);
+        mCrimeSites = CrimeSite.getCrimeSites(24 * 60);
     }
 
     public void setCrimeLocationHitListener(CrimeLocationHitListener listener) {
@@ -24,7 +24,7 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        for(CrimeSite crimeSite : _crimeSites) {
+        for(CrimeSite crimeSite : mCrimeSites) {
             if(crimeSite.intersectWithPlayer(location)) {
                 listener.onCrimeLocationHit(crimeSite);
             }
