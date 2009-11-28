@@ -109,7 +109,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
 
     private void initMap() {
         playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
-        playerLocationOverlay.setCrimeLocationHitListener(this);
         mapView.getOverlays().add(playerLocationOverlay);
         playerLocationOverlay.enableCompass();
         playerLocationOverlay.enableMyLocation();
@@ -148,7 +147,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                 }
                 mGameCountDown.cancel();
                 mGameCountDown.start();
-                mPointsView.setText("");
+                mPointsView.setText("0");
+                // Register the callback for crime hits
+                playerLocationOverlay.setCrimeLocationHitListener(this);
         }
     }
 
@@ -200,6 +201,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         }
 
         public void onFinish() {
+            // Remove callback for the callback for crime hits.
+            playerLocationOverlay.setCrimeLocationHitListener(null);
             showDialog(DIALOG_GAME_FINISHED);
         }
     }
