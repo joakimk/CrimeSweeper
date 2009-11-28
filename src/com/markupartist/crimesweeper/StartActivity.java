@@ -174,6 +174,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
                 playerLocationOverlay.setCrimeLocationHitListener(this);
                 // Reset the crime log
                 mLogAdapter.clear();
+                mFoundCrimeSites.clear();
         }
     }
 
