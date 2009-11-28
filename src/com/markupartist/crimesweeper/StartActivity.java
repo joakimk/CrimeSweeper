@@ -201,7 +201,9 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         }
 
         public void onTick(long millisUntilFinished) {
-            mCountDownView.setText("Time: " + millisUntilFinished / 1000);
+          
+            long seconds = millisUntilFinished / 1000;
+            mCountDownView.setText(String.format("Time: %02d:%02d", seconds / 60,  seconds % 60));
         }
 
         public void onFinish() {
