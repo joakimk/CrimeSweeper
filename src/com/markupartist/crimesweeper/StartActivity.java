@@ -31,6 +31,8 @@ public class StartActivity extends MapActivity {
         crimeSites.add(new CrimeSite("Grand Theft Auto", 59414207, 18273497));
         crimeSites.add(new CrimeSite("Murder One", 59514207, 18173497));        
         
+        CrimeSite.GetCrimeSites(1400);
+        
         
         MapView mapView = (MapView) findViewById(R.id.mapview);
 
