@@ -4,7 +4,7 @@ out
 *.iml
 *.ipr
 *.iws
-*/main.xml
 .classpath
 .project
 default.properties
+res/layout/main.xml
