@@ -29,6 +29,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     private TextView mPointsView;
     private TextView mCountDownView;
     private GameCountDown mGameCountDown;
+    List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();    
 
     /**
      * Called when the activity is first created.
@@ -122,12 +123,14 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     protected boolean isRouteDisplayed() {
         return false;
     }
-
+    
     public void onCrimeLocationHit(CrimeSite crimeSite) {
-        mLogAdapter.add(crimeSite.getTitle());
-        mLogAdapter.notifyDataSetChanged();
-
-        increasePoints();
+        if(!mFoundCrimeSites.contains(crimeSite)) {
+          mLogAdapter.add(crimeSite.getTitle());
+          mLogAdapter.notifyDataSetChanged();
+          mFoundCrimeSites.add(crimeSite);
+          increasePoints();
+        }
     }
 
     /**
