@@ -1,1 +1,1 @@
-Copyright 2009 Johan Nilsson, Albert Ramstedt, Joakim Kolsjö, Joakim Bodin
+Copyright 2009 Johan Nilsson, Albert Ramstedt, Joakim Kolsj√∂, Joakim Bodin
