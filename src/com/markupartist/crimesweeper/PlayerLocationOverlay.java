@@ -11,20 +11,23 @@ public class PlayerLocationOverlay extends MyLocationOverlay {
     private CrimeLocationHitListener listener;
     private List<CrimeSite> mCrimeSites;
 
-    public PlayerLocationOverlay(Context context, MapView mapView, List<CrimeSite> crimeSites) {
+    public PlayerLocationOverlay(Context context, MapView mapView) {
         super(context, mapView);
-        mCrimeSites = crimeSites;
     }
 
     public void setCrimeLocationHitListener(CrimeLocationHitListener listener) {
         this.listener = listener;
     }
 
+    public void setCrimeSites(List<CrimeSite> crimeSites) {
+        this.mCrimeSites = crimeSites;
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(listener == null) {
+        if(listener == null || mCrimeSites == null) {
             return;
         }
 

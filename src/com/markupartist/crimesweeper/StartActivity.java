@@ -9,9 +9,6 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.view.View;
-import android.app.Dialog;
-import android.app.AlertDialog;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
@@ -34,7 +31,6 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
     private TextView mCountDownView;
     private GameCountDown mGameCountDown;
     private List<CrimeSite> crimeSites;
-    //List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();
     List<CrimeSite> mFoundCrimeSites = new ArrayList<CrimeSite>();
     private Button mStartButton;
     private LinkedList<String> mCrimeLogList;
@@ -68,6 +64,8 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         mapView = (MapView) findViewById(R.id.mapview);
         mapController = mapView.getController();
 
+        initPlayerLocation();
+
         mapView.setClickable(true);
         mapView.setEnabled(true);
         mapView.setStreetView(true);
@@ -92,9 +90,7 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
             @Override
             protected void onPostExecute(HelloItemizedOverlay helloItemizedOverlay) {
                 mapOverlays.add(itemizedOverlay);
-
-                initMap();
-                
+                playerLocationOverlay.setCrimeSites(crimeSites);
                 onCrimeSitesLoaded();
             }
         }
@@ -124,8 +120,18 @@ public class StartActivity extends MapActivity implements CrimeLocationHitListen
         }
     }
 
-    private void initMap() {
-        playerLocationOverlay = new PlayerLocationOverlay(this, mapView, crimeSites);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(playerLocationOverlay != null) {
+            playerLocationOverlay.disableCompass();
+            playerLocationOverlay.disableMyLocation();
+        }
+    }
+
+    private void initPlayerLocation() {
+        playerLocationOverlay = new PlayerLocationOverlay(this, mapView);
         mapView.getOverlays().add(playerLocationOverlay);
         playerLocationOverlay.enableCompass();
         playerLocationOverlay.enableMyLocation();
